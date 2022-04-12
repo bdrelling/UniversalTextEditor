@@ -52,32 +52,45 @@ extension TextFormatter.Pattern {
 // MARK: - Convenience
 
 extension TextFormatter.Pattern {
-    static let bold: Self = .words(wrappedWith: #"\*\*"#)
-    static let italic: Self = .words(wrappedWith: #"_"#)
-    static let strikethrough: Self = .words(wrappedWith: #"~~"#)
-    static let h1: Self = .init(#"# +.+\n?"#, excluding: "# +")
-    static let h2: Self = .words(startingWith: #"## +"#, endingWith: #"\n"#)
-    static let h3: Self = .words(startingWith: #"### +"#, endingWith: #"\n"#)
-    static let h4: Self = .words(startingWith: #"#### +"#, endingWith: #"\n"#)
-    static let h5: Self = .words(startingWith: #"##### +"#, endingWith: #"\n"#)
-    static let h6: Self = .words(startingWith: #"###### +"#, endingWith: #"\n"#)
+    static let blockQuote: Self = .init(.blockQuote, excluding: "> ")
+    // TODO: Code block exclusion rule is non-trivial and needs updating.
+    static let codeBlock: Self = .init(.codeBlock, excluding: "```")
+    static let codeInline: Self = .init(.codeInline, excluding: "`")
+    static let emphasis: Self = .init(.emphasis, excluding: "_")
+    static let h1: Self = .init(.h1, excluding: "# ")
+    static let h2: Self = .init(.h2, excluding: "## ")
+    static let h3: Self = .init(.h3, excluding: "### ")
+    static let h4: Self = .init(.h4, excluding: "#### ")
+    static let h5: Self = .init(.h5, excluding: "##### ")
+    static let h6: Self = .init(.h6, excluding: "###### ")
+    static let strikethrough: Self = .init(.strikethrough, excluding: "~~")
+    static let strong: Self = .init(.strong, excluding: "**")
 
     static var allMarkdownPatterns: [Self] {
         [
-            .bold,
-            .italic,
-            .strikethrough,
+            .blockQuote,
+            .codeBlock,
+            .codeInline,
+            .emphasis,
             .h1,
             .h2,
             .h3,
             .h4,
             .h5,
             .h6,
+            .strikethrough,
+            .strong,
         ]
     }
 }
 
 // MARK: - Extensions
+
+extension TextFormatter.Pattern {
+    init(_ markdownRegex: MarkdownRegex, excluding: String? = nil) {
+        self.init(markdownRegex.pattern, excluding: excluding)
+    }
+}
 
 extension TextFormatter.Pattern: ExpressibleByStringLiteral {
     init(stringLiteral value: String) {

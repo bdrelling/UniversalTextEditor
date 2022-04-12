@@ -6,7 +6,7 @@ import UniversalTextEditor
 struct RootView: View {
     typealias DisplayMode = UniversalTextView.DisplayMode
     
-    @State private(set) var displayMode: DisplayMode = .plainText
+    @State private(set) var displayMode: DisplayMode = .stylizedMarkdown
     @State private(set) var text = "**Bold** _Italic_"
 
     var body: some View {

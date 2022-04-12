@@ -16,8 +16,20 @@ struct TextFormatter {
 // MARK: - Factory Methods
 
 extension TextFormatter {
-    static func bold(with attributes: TextAttributes) -> Self {
-        .init(pattern: .bold, attributes: attributes)
+    static func blockQuote(with attributes: TextAttributes) -> Self {
+        .init(pattern: .blockQuote, attributes: attributes)
+    }
+    
+    static func codeBlock(with attributes: TextAttributes) -> Self {
+        .init(pattern: .codeBlock, attributes: attributes)
+    }
+    
+    static func codeInline(with attributes: TextAttributes) -> Self {
+        .init(pattern: .codeInline, attributes: attributes)
+    }
+    
+    static func emphasis(with attributes: TextAttributes) -> Self {
+        .init(pattern: .emphasis, attributes: attributes)
     }
     
     static func h1(with attributes: TextAttributes) -> Self {
@@ -44,10 +56,6 @@ extension TextFormatter {
         .init(pattern: .h6, attributes: attributes)
     }
 
-    static func italic(with attributes: TextAttributes) -> Self {
-        .init(pattern: .italic, attributes: attributes)
-    }
-
     static func strikethrough(with attributes: TextAttributes) -> Self {
         .init(pattern: .strikethrough, attributes: attributes)
     }
@@ -57,6 +65,10 @@ extension TextFormatter {
             .strikethroughStyle: style.rawValue,
         ])
     }
+    
+    static func strong(with attributes: TextAttributes) -> Self {
+        .init(pattern: .strong, attributes: attributes)
+    }
 }
 
 // MARK: - Extensions
@@ -64,31 +76,53 @@ extension TextFormatter {
 extension Array where Element == TextFormatter {
     static func markdownFormatters(for theme: UniversalTextView.Theme) -> Self {
         [
-            .bold(with: [
-                .font: theme.fonts.body.with(traits: .universalBold),
+            .blockQuote(with: [
+                .foregroundColor : UXColor.purple,
+            ]),
+            .codeBlock(with: [
+                .font: theme.fonts.body.with(traits: .monoSpace),
+                .foregroundColor : UXColor.orange,
+            ]),
+            .codeInline(with: [
+                .font: theme.fonts.body.with(traits: .monoSpace),
+                .foregroundColor : UXColor.orange,
+            ]),
+            .emphasis(with: [
+                .font: theme.fonts.body.with(traits: .universalItalic),
+                .foregroundColor : UXColor.yellow,
             ]),
             .h1(with: [
                 .font: theme.fonts.heading1,
+                .foregroundColor : UXColor.green,
             ]),
             .h2(with: [
                 .font: theme.fonts.heading2,
+                .foregroundColor : UXColor.green,
             ]),
             .h3(with: [
                 .font: theme.fonts.heading3,
+                .foregroundColor : UXColor.green,
             ]),
             .h4(with: [
                 .font: theme.fonts.heading4,
+                .foregroundColor : UXColor.green,
             ]),
             .h5(with: [
                 .font: theme.fonts.heading5,
+                .foregroundColor : UXColor.green,
             ]),
             .h6(with: [
                 .font: theme.fonts.heading6,
+                .foregroundColor : UXColor.green,
             ]),
-            .italic(with: [
-                .font: theme.fonts.body.with(traits: .universalItalic),
+            .strikethrough(with: [
+                .strikethroughStyle: NSUnderlineStyle.single.rawValue,
+                .foregroundColor : UXColor.red,
             ]),
-            .strikethrough(),
+            .strong(with: [
+                .font: theme.fonts.body.with(traits: .universalBold),
+//                .foregroundColor : UXColor.blue,
+            ]),
         ]
     }
 }
