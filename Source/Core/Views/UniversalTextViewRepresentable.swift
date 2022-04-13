@@ -7,21 +7,11 @@ public struct UniversalTextViewRepresentable {
     public typealias DisplayMode = UniversalTextView.DisplayMode
 
     @Binding public private(set) var displayMode: DisplayMode
-    @Binding public private(set) var text: String
+    @Binding public private(set) var text: NSAttributedString
 
-    private let attributedText: Binding<NSAttributedString>
-
-    public init(displayMode: Binding<DisplayMode>, text: Binding<String>) {
+    public init(displayMode: Binding<DisplayMode>, text: Binding<NSAttributedString>) {
         self._displayMode = displayMode
         self._text = text
-        
-        self.attributedText = .init(
-            get: {
-                .init(string: text.wrappedValue)
-            }, set: {
-                text.wrappedValue = $0.string
-            }
-        )
     }
 
     private func makeView(context: Context) -> View {
@@ -39,23 +29,23 @@ public struct UniversalTextViewRepresentable {
     private func updateView(_ textView: View, context: Context) {
         guard let textStorage = textView.universalTextStorage else {
             assertionFailure("No text storage object found on UniversalTextView.")
-            textView.text = self.text
+            textView.text = self.text.string
             return
         }
 
         // Replace the entire range of characters with the text.
         textStorage.replaceCharacters(
             in: NSMakeRange(0, textStorage.length),
-            with: self.attributedText.wrappedValue
+            with: self.text
         )
         
-//        if textView.displayMode != self.displayMode {
-//        }
-        textView.displayMode = self.displayMode
+        if textView.displayMode != self.displayMode {
+            textView.displayMode = self.displayMode
+        }
     }
 
     public func makeCoordinator() -> Coordinator {
-        Coordinator(attributedText: self.attributedText)
+        Coordinator(text: self.$text)
     }
 }
 
@@ -120,7 +110,7 @@ struct UniversalTextViewRepresentable_Previews: PreviewProvider {
 
     static var previews: some View {
         ForEach(UniversalTextView.DisplayMode.allCases, id: \.self) { mode in
-            UniversalTextViewRepresentable(displayMode: .constant(mode), text: .constant(self.warningMessage))
+            UniversalTextViewRepresentable(displayMode: .constant(mode), text: .constant(.init(string: self.warningMessage)))
         }
     }
 }

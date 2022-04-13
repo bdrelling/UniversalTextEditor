@@ -19,7 +19,6 @@ let package = Package(
         .target(
             name: "UniversalTextEditor",
             dependencies: [
-//                .product(name: "Markdown", package: "swift-markdown"),
                 .product(name: "Down", package: "Down"),
             ],
             path: "Source"

@@ -22,5 +22,8 @@ The following items are planned, in somewhat priority order:
 ## Resources
 
 - [JohnSundell/Ink](https://github.com/JohnSundell/Ink)
+- [johnxnguyen/Down](https://github.com/johnxnguyen/Down)
 - [ZeeZide/CodeEditor](https://github.com/ZeeZide/CodeEditor/) offered a complex yet simple example of the differences between `UITextView` and `NSTextView`, which was invaluable while starting to dive into the project.
 - [indragiek/MarkdownTextView](https://github.com/indragiek/MarkdownTextView)
+- [apple/swift-markdown](https://github.com/apple/swift-markdown)
+- [christianselig/Markdownosaur](https://github.com/christianselig/Markdownosaur/blob/main/Markdownosaur.swift)

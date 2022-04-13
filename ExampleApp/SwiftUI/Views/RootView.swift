@@ -1,30 +1,79 @@
 // Copyright © 2022 Brian Drelling. All rights reserved.
 
+import Down
 import SwiftUI
 import UniversalTextEditor
 
 struct RootView: View {
     typealias DisplayMode = UniversalTextView.DisplayMode
     
+    enum RenderingMode {
+        case nsAttributedString
+        case attributedString
+        case down
+    }
+    
     @State private(set) var displayMode: DisplayMode = .stylizedMarkdown
-    @State private(set) var text = "**Bold** _Italic_"
+    @State private(set) var text = NSAttributedString("**Bold** _Italic_")
+    
+    @State private(set) var renderingMode: RenderingMode = .down
+    @State private(set) var renderedText: NSAttributedString = .init()
 
     var body: some View {
-        VStack {
-            Picker("Mode", selection: self.$displayMode) {
-                Text("Plain Text")
-                    .tag(DisplayMode.plainText)
-                Text("Stylized Markdown")
-                    .tag(DisplayMode.stylizedMarkdown)
-                Text("Stylized Hidden Markdown")
-                    .tag(DisplayMode.stylizedHiddenMarkdown)
+        HStack {
+            VStack {
+                Picker("Mode", selection: self.$displayMode) {
+                    Text("Plain Text")
+                        .tag(DisplayMode.plainText)
+                    Text("Stylized Markdown")
+                        .tag(DisplayMode.stylizedMarkdown)
+                    Text("Stylized Hidden Markdown")
+                        .tag(DisplayMode.stylizedHiddenMarkdown)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding()
+                .background(.secondary)
+                .frame(maxWidth: .infinity)
+                
+                UniversalTextEditor(displayMode: self.$displayMode, text: self.$text)
             }
-            .pickerStyle(SegmentedPickerStyle())
-            .padding()
-            .background(.secondary)
-            .frame(maxWidth: .infinity)
-            
-            UniversalTextEditor(displayMode: self.$displayMode, text: self.$text)
+            VStack {
+                Picker("Mode", selection: self.$renderingMode) {
+                    Text("NSAttributedString")
+                        .tag(RenderingMode.nsAttributedString)
+                    Text("AttributedString")
+                        .tag(RenderingMode.attributedString)
+                    Text("Down")
+                        .tag(RenderingMode.down)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding()
+                .background(.secondary)
+                .frame(maxWidth: .infinity)
+                
+                SimpleTextView(text: self.$renderedText)
+            }
+        }
+        .onChange(of: self.text) { _ in
+            self.render()
+        }
+        .onChange(of: self.renderingMode) { _ in
+            self.render()
+        }
+    }
+    
+    private func render() {
+        do {
+            switch self.renderingMode {
+            case .nsAttributedString:
+                self.renderedText = try NSAttributedString(markdown: self.text.string)
+            case .attributedString:
+                self.renderedText = try NSAttributedString(AttributedString(markdown: self.text.string))
+            case .down:
+                self.renderedText = try Down(markdownString: self.text.string).toAttributedString()
+            }
+        } catch {
+            print(error.localizedDescription)
         }
     }
 }
@@ -42,7 +91,7 @@ struct RootView_Previews: PreviewProvider {
         """
 
         ForEach(UniversalTextView.DisplayMode.allCases, id: \.self) { mode in
-            RootView(displayMode: mode, text: message)
+            RootView(displayMode: mode, text: .init(string: message), renderedText: .init(string: message))
                 .previewDisplayName(mode.rawValue)
         }
     }

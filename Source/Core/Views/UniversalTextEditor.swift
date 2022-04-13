@@ -4,16 +4,29 @@ import SwiftUI
 
 public struct UniversalTextEditor: View {
     @Binding private var displayMode: UniversalTextView.DisplayMode
-    @Binding var text: String
+    @Binding var text: NSAttributedString
 
     public var body: some View {
         UniversalTextViewRepresentable(displayMode: self.$displayMode, text: self.$text)
             .background(.blue)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-    public init(displayMode: Binding<UniversalTextView.DisplayMode>, text: Binding<String>) {
+    
+    public init(displayMode: Binding<UniversalTextView.DisplayMode>, text: Binding<NSAttributedString>) {
         self._displayMode = displayMode
         self._text = text
+    }
+    
+    public init(displayMode: Binding<UniversalTextView.DisplayMode>, text: Binding<String>) {
+        self._displayMode = displayMode
+        
+        self._text = .init(
+            get: {
+                .init(string: text.wrappedValue)
+            }, set: {
+                text.wrappedValue = $0.string
+            }
+        )
     }
     
     public init(displayMode: UniversalTextView.DisplayMode, text: Binding<String>) {

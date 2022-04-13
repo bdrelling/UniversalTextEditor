@@ -29,7 +29,7 @@ public class MarkdownTextStorage: NSTextStorage {
 
     // MARK: Initializers
     
-    init(displayMode: UniversalTextView.DisplayMode, theme: UniversalTextView.Theme) {
+    init(displayMode: UniversalTextView.DisplayMode, theme: UniversalTextView.Theme = .default) {
         self.displayMode = displayMode
         self.theme = theme
         super.init()

@@ -4,10 +4,10 @@ import SwiftUI
 
 public extension UniversalTextViewRepresentable {
     class Coordinator: NSObject {
-        public var attributedText: Binding<NSAttributedString>
+        public var text: Binding<NSAttributedString>
 
-        public init(attributedText: Binding<NSAttributedString>) {
-            self.attributedText = attributedText
+        public init(text: Binding<NSAttributedString>) {
+            self.text = text
         }
     }
 }
@@ -24,7 +24,7 @@ extension UniversalTextViewRepresentable.Coordinator {}
                 return
             }
             
-            self.attributedText.wrappedValue = textView.textContentStorage?.attributedString ?? NSMutableAttributedString(string: textView.string)
+            self.text.wrappedValue = textView.textContentStorage?.attributedString ?? NSMutableAttributedString(string: textView.string)
         }
 
         public func textDidBeginEditing(_ notification: Notification) {}
