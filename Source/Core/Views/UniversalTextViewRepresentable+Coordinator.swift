@@ -23,7 +23,7 @@ extension UniversalTextViewRepresentable.Coordinator {}
             guard let textView = notification.object as? UXTextView else {
                 return
             }
-            
+
             self.text.wrappedValue = textView.textContentStorage?.attributedString ?? NSMutableAttributedString(string: textView.string)
         }
 

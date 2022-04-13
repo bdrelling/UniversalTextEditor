@@ -5,16 +5,16 @@ import SwiftUI
 
 open class UniversalTextView: UXTextView {
     // MARK: Properties
-    
+
     public private(set) var hasMenuEnabled: Bool = true
-    
+
     public var displayMode: DisplayMode = .default {
         didSet {
             (self.layoutManager as? MarkdownLayoutManager)?.displayMode = self.displayMode
             (self.textStorage as? MarkdownTextStorage)?.displayMode = self.displayMode
         }
     }
-    
+
     public var theme: Theme = .default {
         didSet {
             (self.layoutManager as? MarkdownLayoutManager)?.theme = self.theme
@@ -27,9 +27,9 @@ open class UniversalTextView: UXTextView {
         .init(characters: "i", modifierFlags: [.command], action: #selector(toggleSelectionItalics)),
         .init(characters: "u", modifierFlags: [.command], action: #selector(toggleSelectionUnderline)),
     ]
-    
+
     // MARK: Initializers
-    
+
     public convenience init(displayMode: DisplayMode = .default, theme: Theme = .default) {
         self.init(frame: .zero, displayMode: displayMode, theme: theme)
     }
@@ -46,7 +46,7 @@ open class UniversalTextView: UXTextView {
         textStorage.addLayoutManager(layoutManager)
 
         self.init(frame: frame, textContainer: textContainer)
-        
+
         self.displayMode = displayMode
         self.theme = theme
     }
@@ -103,47 +103,60 @@ open class UniversalTextView: UXTextView {
 
 struct UniversalTextView_Previews: PreviewProvider {
     private static let data = [
-        "**Strong!**",
+        "> Blockquote",
+        """
+        ```
+        Code Block
+        ```
+        """,
+        "`Inline Code`",
         "_Emphasis_",
-        "~~Strikethrough~~",
         "# Heading 1",
         "## Heading 2",
         "### Heading 3",
         "#### Heading 4",
         "##### Heading 5",
         "###### Heading 6",
+        "~~Strikethrough~~",
+        "**Strong!**",
     ]
-    
+
     static var previews: some View {
         ForEach(self.data, id: \.self) { markdown in
             HStack {
-                self.textView(markdown: markdown)
-                self.downView(markdown: markdown)
+                VStack {
+                    Text("UniversalTextView")
+                    Divider()
+                    self.textView(markdown: markdown)
+                }
+                Divider()
+                VStack {
+                    Text("Down TextView")
+                    Divider()
+                    self.downTextView(markdown: markdown)
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: 100)
             .previewLayout(.sizeThatFits)
         }
     }
-    
+
     private static func textView(markdown: String) -> PreviewTextView {
         let textView = UniversalTextView(displayMode: .stylizedMarkdown)
         textView.text = markdown
-        
+
         return .init(textView)
     }
-    
-    private static func downView(markdown: String) -> PreviewTextView {
-        let textView = UXTextView(frame: .zero)
-        textView.font = UniversalTextView.Theme.default.fonts.body
-        
+
+    private static func downTextView(markdown: String) -> PreviewTextView {
+        let textView = DownTextView(frame: .zero)
+
         do {
             textView.textStorage?.attributedText = try Down(markdownString: markdown).toAttributedString()
         } catch {
             textView.text = "Error rendering DownView for markdown string: \(markdown)"
         }
-        
+
         return .init(textView)
     }
 }
-
-

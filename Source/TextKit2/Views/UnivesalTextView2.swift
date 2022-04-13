@@ -4,21 +4,20 @@ import Down
 import SwiftUI
 
 #if DEBUG
-import Combine
+    import Combine
 #endif
 
 open class UniversalTextView2: UXTextView {
     public typealias DisplayMode = UniversalTextView.DisplayMode
-    
-    @available(*, unavailable)
-    open override var layoutManager: NSLayoutManager? {
-        return nil
+
+    @available(*, unavailable)  override open var layoutManager: NSLayoutManager? {
+        nil
     }
 
     public private(set) var hasMenuEnabled: Bool = true
-    
+
     #if DEBUG
-    private var subscriptions = Set<AnyCancellable>()
+        private var subscriptions = Set<AnyCancellable>()
     #endif
 
     private let keyboardShortcuts: [KeyboardShortcut] = [
@@ -35,22 +34,22 @@ open class UniversalTextView2: UXTextView {
             let textContainer = NSTextContainer()
             textContainer.widthTracksTextView = true
             textContainer.heightTracksTextView = true
-            
+
             let textLayoutManager = MarkdownTextLayoutManager()
             textLayoutManager.textContainer = textContainer
-            
+
             let textContentStorage = MarkdownTextContentStorage()
             textContentStorage.addTextLayoutManager(textLayoutManager)
 
             self.init(frame: frame, textContainer: textContainer)
         }
-        
+
         #if DEBUG
-        NotificationCenter.default.publisher(for: NSTextView.didSwitchToNSLayoutManagerNotification)
-            .sink { notification in
-                print("Did switch to TextKit 1!")
-            }
-            .store(in: &self.subscriptions)
+            NotificationCenter.default.publisher(for: NSTextView.didSwitchToNSLayoutManagerNotification)
+                .sink { _ in
+                    print("Did switch to TextKit 1!")
+                }
+                .store(in: &self.subscriptions)
         #endif
     }
 

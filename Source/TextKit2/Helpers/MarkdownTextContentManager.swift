@@ -1,12 +1,14 @@
+// Copyright © 2022 Brian Drelling. All rights reserved.
+
 import SwiftUI
 
 final class MarkdownTextContentManager: NSTextContentManager {
     override init() {
         super.init()
-        
+
         self.delegate = self
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -26,6 +28,6 @@ extension MarkdownTextContentManager: NSTextContentManagerDelegate {
 //                }
 //            }
 //        }
-        return true
+        true
     }
 }

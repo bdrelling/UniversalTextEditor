@@ -6,13 +6,13 @@ public class MarkdownTextStorage: NSTextStorage {
     // MARK: Properties
 
     private let backingStore = NSMutableAttributedString()
-    
+
     public var displayMode: UniversalTextView.DisplayMode = .default {
         didSet {
             self.update()
         }
     }
-    
+
     public var theme: UniversalTextView.Theme = .default {
         didSet {
             self.update()
@@ -22,35 +22,35 @@ public class MarkdownTextStorage: NSTextStorage {
     override public var string: String {
         self.backingStore.string
     }
-    
+
     private var formatters: [TextFormatter] {
         .markdownFormatters(for: self.theme)
     }
 
     // MARK: Initializers
-    
+
     init(displayMode: UniversalTextView.DisplayMode, theme: UniversalTextView.Theme = .default) {
         self.displayMode = displayMode
         self.theme = theme
         super.init()
     }
 
-     required init?(coder aDecoder: NSCoder) {
-         super.init(coder: aDecoder)
-     }
-    
-     #if os(macOS)
-         required init?(pasteboardPropertyList propertyList: Any, ofType type: NSPasteboard.PasteboardType) {
-             super.init(pasteboardPropertyList: propertyList, ofType: type)
-         }
-     #endif
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
+    #if os(macOS)
+        required init?(pasteboardPropertyList propertyList: Any, ofType type: NSPasteboard.PasteboardType) {
+            super.init(pasteboardPropertyList: propertyList, ofType: type)
+        }
+    #endif
 
     // MARK: Overrides
 
     override public func attributes(at location: Int, effectiveRange range: NSRangePointer?) -> TextAttributes {
         self.backingStore.attributes(at: location, effectiveRange: range)
     }
-    
+
     override public func processEditing() {
         self.performReplacementsForRange(changedRange: self.editedRange)
         super.processEditing()
@@ -75,7 +75,7 @@ public class MarkdownTextStorage: NSTextStorage {
     }
 
     // MARK: Utilities
-    
+
     private func applyTextAttributes(of formatter: TextFormatter, to range: NSRange) {
         // Apply the text attributes to the range.
         self.addAttributes(formatter.attributes, range: range)
@@ -100,12 +100,12 @@ public class MarkdownTextStorage: NSTextStorage {
     private func processFormatters(in range: NSRange) throws {
         // Reset the range to the default before beginning.
         self.addAttributes(self.theme.defaultTextAttributes, range: range)
-        
+
         // If the mose is plaintext, stop after resetting the text to the defaults.
         guard self.displayMode != .plainText else {
             return
         }
-        
+
         // Iterate through each formatter and apply its text attributes to the matching ranges.
         for formatter in self.formatters {
             try formatter.pattern.regex()
@@ -115,7 +115,7 @@ public class MarkdownTextStorage: NSTextStorage {
                 }
         }
     }
-    
+
     private func tryProcessFormatters(in range: NSRange) {
         do {
             try self.processFormatters(in: range)
@@ -139,11 +139,11 @@ public class MarkdownTextStorage: NSTextStorage {
 
         self.tryProcessFormatters(in: extendedRange)
     }
-    
+
     private func report(_ error: Error) {
         print(error.localizedDescription)
     }
-    
+
     private func resetTextAttributes() {
         self.addAttributes(self.theme.defaultTextAttributes, range: NSMakeRange(0, self.length))
     }

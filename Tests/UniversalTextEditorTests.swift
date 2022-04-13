@@ -1,9 +1,11 @@
+// Copyright © 2022 Brian Drelling. All rights reserved.
+
 //// Copyright © 2022 Brian Drelling. All rights reserved.
 //
-//@testable import UniversalTextEditor
-//import XCTest
+// @testable import UniversalTextEditor
+// import XCTest
 //
-//final class UniversalTextEditorTests: XCTestCase {
+// final class UniversalTextEditorTests: XCTestCase {
 //    func testMarkdownSample() throws {
 //        let markdownText = """
 //        This is some markdown.
@@ -83,7 +85,7 @@
 //
 ////        let attributedString = down.toAttributedString()
 //    }
-//}
+// }
 //
 //// Keys:
 //// font

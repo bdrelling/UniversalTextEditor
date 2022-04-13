@@ -1,8 +1,10 @@
+// Copyright © 2022 Brian Drelling. All rights reserved.
+
 //// Copyright © 2022 Brian Drelling. All rights reserved.
 //
-//import SwiftUI
+// import SwiftUI
 //
-//public extension UniversalTextView2Representable {
+// public extension UniversalTextView2Representable {
 //    class Coordinator: NSObject {
 //        public var attributedText: Binding<NSAttributedString>
 //
@@ -10,20 +12,20 @@
 //            self.attributedText = attributedText
 //        }
 //    }
-//}
+// }
 //
 //// MARK: - Extensions
 //
-//extension UniversalTextView2Representable.Coordinator {}
+// extension UniversalTextView2Representable.Coordinator {}
 //
-//#if canImport(AppKit)
+// #if canImport(AppKit)
 //
 //    extension UniversalTextView2Representable.Coordinator: NSTextViewDelegate {
 //        public func textDidChange(_ notification: Notification) {
 //            guard let textView = notification.object as? UXTextView else {
 //                return
 //            }
-//            
+//
 //            self.attributedText.wrappedValue = textView.textContentStorage?.attributedString ?? NSMutableAttributedString(string: textView.string)
 //        }
 //
@@ -32,7 +34,7 @@
 //        public func textDidEndEditing(_ notification: Notification) {}
 //    }
 //
-//#elseif canImport(UIKit)
+// #elseif canImport(UIKit)
 //
 //    extension UniversalTextView2Representable.Coordinator: UITextViewDelegate {
 //        public func textViewDidChange(_ textView: UXTextView) {
@@ -48,4 +50,4 @@
 //        }
 //    }
 //
-//#endif
+// #endif

@@ -11,15 +11,15 @@ public struct UniversalTextEditor: View {
             .background(.blue)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-    
+
     public init(displayMode: Binding<UniversalTextView.DisplayMode>, text: Binding<NSAttributedString>) {
         self._displayMode = displayMode
         self._text = text
     }
-    
+
     public init(displayMode: Binding<UniversalTextView.DisplayMode>, text: Binding<String>) {
         self._displayMode = displayMode
-        
+
         self._text = .init(
             get: {
                 .init(string: text.wrappedValue)
@@ -28,11 +28,11 @@ public struct UniversalTextEditor: View {
             }
         )
     }
-    
+
     public init(displayMode: UniversalTextView.DisplayMode, text: Binding<String>) {
         self.init(displayMode: .constant(displayMode), text: text)
     }
-    
+
     public init(text: Binding<String>) {
         self.init(displayMode: .plainText, text: text)
     }

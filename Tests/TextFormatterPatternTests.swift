@@ -5,19 +5,19 @@ import XCTest
 
 final class TextFormatterPatternTests: XCTestCase {
     // MARK: - Block Quote
-    
+
     func testBlockQuotePattern() throws {
         throw XCTSkip("Not yet implemented.")
     }
-    
+
     // MARK: - Code Block
-    
+
     func testCodeBlockPattern() throws {
         throw XCTSkip("Not yet implemented.")
     }
-    
+
     // MARK: - Code Inline
-    
+
     func testCodeInlinePattern() throws {
         // Create the test data with expected number of matches.
         let data: TestDataCollection = [
@@ -33,59 +33,59 @@ final class TextFormatterPatternTests: XCTestCase {
             ("`Lorem` and `1234`", matches: 2),
             ("`Lorem`and`1234`", matches: 2),
         ]
-        
+
         try self.evaluate(pattern: .codeInline, using: data)
     }
-    
+
     // MARK: - Emphasis
-    
+
     func testEmphasisPattern() throws {
         // Create the test data with expected number of matches.
         let data = self.inlinePatternData(using: "_") + [
             // No additional data.
         ]
-        
+
         try self.evaluate(pattern: .emphasis, using: data)
     }
-    
+
     // MARK: - Headings
-    
+
     func testH1Pattern() throws {
         try self.evaluate(pattern: .h1, using: self.headingPatternData(using: "#"))
     }
-    
+
     func testH2Pattern() throws {
         try self.evaluate(pattern: .h2, using: self.headingPatternData(using: "##"))
     }
-    
+
     func testH3Pattern() throws {
         try self.evaluate(pattern: .h3, using: self.headingPatternData(using: "###"))
     }
-    
+
     func testH4Pattern() throws {
         try self.evaluate(pattern: .h4, using: self.headingPatternData(using: "####"))
     }
-    
+
     func testH5Pattern() throws {
         try self.evaluate(pattern: .h5, using: self.headingPatternData(using: "#####"))
     }
-    
+
     func testH6Pattern() throws {
         try self.evaluate(pattern: .h6, using: self.headingPatternData(using: "######"))
     }
-    
+
     // MARK: - Strikethrough
-    
+
     func testStrikethroughPattern() throws {
         // Create the test data with expected number of matches.
         let data = self.inlinePatternData(using: "~~") + [
             // No Matches
             ("~Lorem~", matches: 0),
         ]
-        
+
         try self.evaluate(pattern: .strikethrough, using: data)
     }
-    
+
     // MARK: - Strong
 
     func testStrongPattern() throws {
@@ -94,26 +94,26 @@ final class TextFormatterPatternTests: XCTestCase {
             // No Matches
             ("*Lorem*", matches: 0),
         ]
-        
+
         try self.evaluate(pattern: .strong, using: data)
     }
-    
+
     // MARK: - Sandbox
-    
+
     func testExclusionRules() throws {
         // Test that the excluded text is being stripped out when pattern matching,
         // which will help to identify the string attribution as well.
         throw XCTSkip("Not yet implemented.")
     }
-    
+
     // MARK: - Utilities
-    
+
     private func evaluate(pattern: TextFormatter.Pattern, using data: TestDataCollection, numberOfCaptureGroups: Int = 1) throws {
         let regex = try pattern.regex()
 
         // The pattern should have one distinct capture group.
         XCTAssertEqual(regex.numberOfCaptureGroups, numberOfCaptureGroups)
-        
+
         for (text, expectedNumberOfMatches) in data {
             let numberOfMatches = regex.numberOfMatches(in: text)
             XCTAssertEqual(
@@ -123,7 +123,7 @@ final class TextFormatterPatternTests: XCTestCase {
             )
         }
     }
-    
+
     private func inlinePatternData(using symbols: String) -> TestDataCollection {
         [
             // Single Match
@@ -138,9 +138,9 @@ final class TextFormatterPatternTests: XCTestCase {
             ("\(symbols) Lorem \(symbols)", matches: 0),
             ("\(symbols)Lorem \(symbols)", matches: 0),
             ("\(symbols) Lorem\(symbols)", matches: 0),
-       ]
+        ]
     }
-    
+
     #warning("Re-enable the below data points when the initial data set is successfully passing.")
     private func headingPatternData(using symbols: String) -> TestDataCollection {
         [
@@ -158,7 +158,7 @@ final class TextFormatterPatternTests: XCTestCase {
             // Multi-line Matches
             ("""
             \(symbols) Lorem Ipsum
-            """, matches: 1)
+            """, matches: 1),
         ]
     }
 }

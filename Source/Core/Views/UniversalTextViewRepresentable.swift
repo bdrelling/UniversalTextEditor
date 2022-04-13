@@ -38,7 +38,7 @@ public struct UniversalTextViewRepresentable {
             in: NSMakeRange(0, textStorage.length),
             with: self.text
         )
-        
+
         if textView.displayMode != self.displayMode {
             textView.displayMode = self.displayMode
         }

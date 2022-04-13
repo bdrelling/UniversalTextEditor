@@ -7,7 +7,7 @@ extension TextFormatter {
         private static let defaultPhraseRegex = #"[^\s][\S ]+[^\s]"#
 
         let rawValue: String
-        
+
         private let exclusionPattern: String?
 
         init(_ pattern: String, excluding exclusionPattern: String? = nil) {
@@ -18,7 +18,7 @@ extension TextFormatter {
         func regex() throws -> NSRegularExpression {
             try .init(pattern: self.rawValue)
         }
-        
+
         func exclusionRegex() -> NSRegularExpression? {
             if let exclusionPattern = self.exclusionPattern {
                 return try? .init(pattern: exclusionPattern)
@@ -39,11 +39,11 @@ extension TextFormatter.Pattern {
     static func words(startingWith pattern: String) -> Self {
         self.init("\(pattern)\(Self.defaultPhraseRegex)", excluding: pattern)
     }
-    
+
     static func words(endingWith pattern: String) -> Self {
         self.init("\(Self.defaultPhraseRegex)\(pattern)", excluding: pattern)
     }
-    
+
     static func words(startingWith startingPattern: String, endingWith endingPattern: String) -> Self {
         self.init("\(startingPattern)\(Self.defaultPhraseRegex)\(endingPattern)", excluding: startingPattern)
     }
@@ -87,8 +87,8 @@ extension TextFormatter.Pattern {
 // MARK: - Extensions
 
 extension TextFormatter.Pattern {
-    init(_ markdownRegex: MarkdownRegex, excluding: String? = nil) {
-        self.init(markdownRegex.pattern, excluding: excluding)
+    init(_ element: MarkdownElement, excluding: String? = nil) {
+        self.init(element.pattern, excluding: excluding)
     }
 }
 

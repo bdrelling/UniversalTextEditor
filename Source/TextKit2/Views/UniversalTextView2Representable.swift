@@ -1,8 +1,10 @@
+// Copyright © 2022 Brian Drelling. All rights reserved.
+
 //// Copyright © 2022 Brian Drelling. All rights reserved.
 //
-//import SwiftUI
+// import SwiftUI
 //
-//public struct UniversalTextView2Representable {
+// public struct UniversalTextView2Representable {
 //    public typealias View = UniversalTextView2
 //    public typealias DisplayMode = UniversalTextView.DisplayMode
 //
@@ -14,7 +16,7 @@
 //    public init(displayMode: DisplayMode, text: Binding<String>) {
 //        self.displayMode = displayMode
 //        self._text = text
-//        
+//
 //        self.attributedText = .init(
 //            get: {
 //                .init(string: text.wrappedValue)
@@ -42,18 +44,18 @@
 //            textView.text = self.text
 //            return
 //        }
-//        
+//
 //        #warning("Not sure what to do here!")
 //        print("Trying to update view.")
-//        
+//
 ////        textContentStorage.attributedString = self.attributedText.wrappedValue
-//        
+//
 //        guard let textStorage = textContentStorage.textStorage else {
 //            assertionFailure("\(View.className()).textContentStorage.textStorage property is nil.")
 //            textView.text = self.text
 //            return
 //        }
-//        
+//
 //        #warning("This causes the app to crash")
 ////        // Replace the entire range of characters with the text.
 //        textStorage.replaceCharacters(
@@ -65,9 +67,9 @@
 //    public func makeCoordinator() -> Coordinator {
 //        Coordinator(attributedText: self.attributedText)
 //    }
-//}
+// }
 //
-//#if canImport(AppKit)
+// #if canImport(AppKit)
 //
 //    extension UniversalTextView2Representable: NSViewRepresentable {
 //        public func makeNSView(context: Context) -> NSScrollView {
@@ -93,7 +95,7 @@
 //        }
 //    }
 //
-//#elseif canImport(UIKit)
+// #elseif canImport(UIKit)
 //
 //    extension UniversalTextView2Representable: UIViewRepresentable {
 //        public func makeUIView(context: Context) -> View {
@@ -113,11 +115,11 @@
 //        }
 //    }
 //
-//#endif
+// #endif
 //
 //// MARK: - Previews
 //
-//struct UniversalTextView2Representable_Previews: PreviewProvider {
+// struct UniversalTextView2Representable_Previews: PreviewProvider {
 //    private static let warningMessage = """
 //    Please note that UITextViews or NSTextViews running in previews within
 //    the SwiftUI canvas (iOS) or XCPreviewAgent (macOS) are prone to quirky behaviors.
@@ -131,4 +133,4 @@
 //            UniversalTextView2Representable(displayMode: mode, text: .constant(self.warningMessage))
 //        }
 //    }
-//}
+// }

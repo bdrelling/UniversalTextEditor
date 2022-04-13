@@ -1,5 +1,5 @@
 /// Source: http://daringfireball.net/projects/markdown/
-enum MarkdownRegex: CaseIterable {
+enum MarkdownElement: CaseIterable {
     case blockQuote
     case codeBlock
     case codeInline
@@ -15,7 +15,7 @@ enum MarkdownRegex: CaseIterable {
     case strong
     case unorderedList
     case orderedList
-    
+
     var pattern: String {
         switch self {
         case .blockQuote:
@@ -69,17 +69,17 @@ enum MarkdownRegex: CaseIterable {
             return Self.patternForList(marker: #"\d+[.]"#)
         }
     }
-    
+
     private static func patternForHeader(level: Int) -> String {
         "^(\\#{\(level)})[ \t]*(?:.+?)[ \t]*\\#*\n+"
     }
-    
+
     private static func patternForList(marker: String) -> String {
         "^(?:[ ]{0,3}(?:\(marker))[ \t]+)(.+)\n"
     }
-    
+
     // Se-tex Style Headers
-    
+
     // static let seTextH1 = "^(?:.+)[ \t]*\n=+[ \t]*\n+"
     // static let seTextH2 = "^(?:.+)[ \t]*\n-+[ \t]*\n+"
 }

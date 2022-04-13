@@ -4,19 +4,19 @@ import SwiftUI
 
 final class MarkdownLayoutManager: NSLayoutManager {
     // MARK: Properties
-    
+
     public var displayMode: UniversalTextView.DisplayMode = .default
     public var theme: UniversalTextView.Theme = .default
-    
+
     // MARK: Initializers
-    
+
     init(displayMode: UniversalTextView.DisplayMode = .default, theme: UniversalTextView.Theme = .default) {
         self.displayMode = displayMode
         self.theme = theme
         super.init()
         self.delegate = self
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.delegate = self
@@ -30,7 +30,7 @@ extension MarkdownLayoutManager: NSLayoutManagerDelegate {
         guard self.displayMode == .stylizedHiddenMarkdown else {
             return 0
         }
-        
+
         // Make mutableProperties an optional to allow checking if it gets allocated
         var mutableProperties: UnsafeMutablePointer<NSLayoutManager.GlyphProperty>?
 
