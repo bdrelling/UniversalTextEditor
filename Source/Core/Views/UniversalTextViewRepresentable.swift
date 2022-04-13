@@ -5,17 +5,24 @@ import SwiftUI
 public struct UniversalTextViewRepresentable {
     public typealias View = UniversalTextView
     public typealias DisplayMode = UniversalTextView.DisplayMode
+    public typealias Theme = UniversalTextView.Theme
 
-    @Binding public private(set) var displayMode: DisplayMode
     @Binding public private(set) var text: NSAttributedString
+    @Binding public private(set) var displayMode: DisplayMode
+    @Binding public private(set) var theme: Theme
 
-    public init(displayMode: Binding<DisplayMode>, text: Binding<NSAttributedString>) {
+    public init(
+        text: Binding<NSAttributedString>,
+        displayMode: Binding<DisplayMode> = .constant(.stylizedMarkdown),
+        theme: Binding<Theme> = .constant(.default)
+    ) {
         self._displayMode = displayMode
         self._text = text
+        self._theme = theme
     }
 
     private func makeView(context: Context) -> View {
-        let textView = View(frame: .zero, displayMode: self.displayMode)
+        let textView = View(frame: .zero, displayMode: self.displayMode, theme: self.theme)
         textView.delegate = context.coordinator
         textView.isEditable = true
         textView.isSelectable = true
@@ -38,10 +45,12 @@ public struct UniversalTextViewRepresentable {
             in: NSMakeRange(0, textStorage.length),
             with: self.text
         )
-
+        
         if textView.displayMode != self.displayMode {
             textView.displayMode = self.displayMode
         }
+        
+        textView.theme = self.theme
     }
 
     public func makeCoordinator() -> Coordinator {
@@ -110,7 +119,10 @@ struct UniversalTextViewRepresentable_Previews: PreviewProvider {
 
     static var previews: some View {
         ForEach(UniversalTextView.DisplayMode.allCases, id: \.self) { mode in
-            UniversalTextViewRepresentable(displayMode: .constant(mode), text: .constant(.init(string: self.warningMessage)))
+            UniversalTextViewRepresentable(
+                text: .constant(.init(string: self.warningMessage)),
+                displayMode: .constant(mode)
+            )
         }
     }
 }

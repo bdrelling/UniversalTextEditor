@@ -3,22 +3,36 @@
 import SwiftUI
 
 public struct UniversalTextEditor: View {
-    @Binding private var displayMode: UniversalTextView.DisplayMode
+    public typealias DisplayMode = UniversalTextView.DisplayMode
+    public typealias Theme = UniversalTextView.Theme
+    
     @Binding var text: NSAttributedString
+    @Binding private var displayMode: DisplayMode
+    @Binding private var theme: Theme
 
     public var body: some View {
-        UniversalTextViewRepresentable(displayMode: self.$displayMode, text: self.$text)
+        UniversalTextViewRepresentable(text: self.$text, displayMode: self.$displayMode, theme: self.$theme)
             .background(.blue)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
-    public init(displayMode: Binding<UniversalTextView.DisplayMode>, text: Binding<NSAttributedString>) {
-        self._displayMode = displayMode
+    public init(
+        text: Binding<NSAttributedString>,
+        displayMode: Binding<DisplayMode> = .constant(.stylizedMarkdown),
+        theme: Binding<Theme> = .constant(.default)
+    ) {
         self._text = text
+        self._displayMode = displayMode
+        self._theme = theme
     }
 
-    public init(displayMode: Binding<UniversalTextView.DisplayMode>, text: Binding<String>) {
+    public init(
+        text: Binding<String>,
+        displayMode: Binding<DisplayMode> = .constant(.stylizedMarkdown),
+        theme: Binding<Theme> = .constant(.default)
+    ) {
         self._displayMode = displayMode
+        self._theme = theme
 
         self._text = .init(
             get: {
@@ -29,12 +43,12 @@ public struct UniversalTextEditor: View {
         )
     }
 
-    public init(displayMode: UniversalTextView.DisplayMode, text: Binding<String>) {
-        self.init(displayMode: .constant(displayMode), text: text)
-    }
-
-    public init(text: Binding<String>) {
-        self.init(displayMode: .plainText, text: text)
+    public init(
+        text: Binding<String>,
+        displayMode: DisplayMode = .stylizedMarkdown,
+        theme: Theme = .default
+    ) {
+        self.init(text: text, displayMode: .constant(displayMode), theme: .constant(theme))
     }
 }
 
@@ -51,7 +65,7 @@ struct UniversalTextEditor_Previews: PreviewProvider {
 
     static var previews: some View {
         ForEach(UniversalTextView.DisplayMode.allCases, id: \.self) { mode in
-            UniversalTextEditor(displayMode: mode, text: .constant(self.warningMessage))
+            UniversalTextEditor(text: .constant(self.warningMessage), displayMode: mode)
         }
     }
 }

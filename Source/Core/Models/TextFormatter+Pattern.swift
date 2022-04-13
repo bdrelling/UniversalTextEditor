@@ -63,8 +63,10 @@ extension TextFormatter.Pattern {
     static let h4: Self = .init(.h4, excluding: "#### ")
     static let h5: Self = .init(.h5, excluding: "##### ")
     static let h6: Self = .init(.h6, excluding: "###### ")
+    // TODO: Implement link!
+//    static let link: Self = .init(.link)
     static let strikethrough: Self = .init(.strikethrough, excluding: "~~")
-    static let strong: Self = .init(.strong, excluding: "**")
+    static let strong: Self = .init(.strong, excluding: #"\*\*"#)
 
     static var allMarkdownPatterns: [Self] {
         [

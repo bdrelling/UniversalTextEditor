@@ -7,119 +7,71 @@ struct TextFormatter {
     let pattern: Pattern
     let attributes: TextAttributes
 
-    init(pattern: Pattern, attributes: TextAttributes) {
+    init(pattern: Pattern, attributes: NullableTextAttributes) {
         self.pattern = pattern
-        self.attributes = attributes
+        self.attributes = attributes.compactMapValues { $0 }
     }
 }
 
 // MARK: - Factory Methods
 
 extension TextFormatter {
-    static func blockQuote(with attributes: TextAttributes) -> Self {
+    static func blockQuote(with attributes: NullableTextAttributes) -> Self {
         .init(pattern: .blockQuote, attributes: attributes)
     }
 
-    static func codeBlock(with attributes: TextAttributes) -> Self {
+    static func codeBlock(with attributes: NullableTextAttributes) -> Self {
         .init(pattern: .codeBlock, attributes: attributes)
     }
 
-    static func codeInline(with attributes: TextAttributes) -> Self {
+    static func codeInline(with attributes: NullableTextAttributes) -> Self {
         .init(pattern: .codeInline, attributes: attributes)
     }
 
-    static func emphasis(with attributes: TextAttributes) -> Self {
+    static func emphasis(with attributes: NullableTextAttributes) -> Self {
         .init(pattern: .emphasis, attributes: attributes)
     }
 
-    static func h1(with attributes: TextAttributes) -> Self {
+    static func h1(with attributes: NullableTextAttributes) -> Self {
         .init(pattern: .h1, attributes: attributes)
     }
 
-    static func h2(with attributes: TextAttributes) -> Self {
+    static func h2(with attributes: NullableTextAttributes) -> Self {
         .init(pattern: .h2, attributes: attributes)
     }
 
-    static func h3(with attributes: TextAttributes) -> Self {
+    static func h3(with attributes: NullableTextAttributes) -> Self {
         .init(pattern: .h3, attributes: attributes)
     }
 
-    static func h4(with attributes: TextAttributes) -> Self {
+    static func h4(with attributes: NullableTextAttributes) -> Self {
         .init(pattern: .h4, attributes: attributes)
     }
 
-    static func h5(with attributes: TextAttributes) -> Self {
+    static func h5(with attributes: NullableTextAttributes) -> Self {
         .init(pattern: .h5, attributes: attributes)
     }
 
-    static func h6(with attributes: TextAttributes) -> Self {
+    static func h6(with attributes: NullableTextAttributes) -> Self {
         .init(pattern: .h6, attributes: attributes)
     }
 
-    static func strikethrough(with attributes: TextAttributes) -> Self {
+    static func strikethrough(with attributes: NullableTextAttributes) -> Self {
         .init(pattern: .strikethrough, attributes: attributes)
     }
 
-    static func strong(with attributes: TextAttributes) -> Self {
+    static func strong(with attributes: NullableTextAttributes) -> Self {
         .init(pattern: .strong, attributes: attributes)
     }
 }
 
-// MARK: - Extensions
+// MARK: - Supporting Types
 
-extension Array where Element == TextFormatter {
-    static func markdownFormatters(for theme: UniversalTextView.Theme) -> Self {
-        [
-            .blockQuote(with: [
-                .foregroundColor: UXColor.purple,
-            ]),
-            .codeBlock(with: [
-                .font: theme.fonts.body.with(traits: .monoSpace),
-                .foregroundColor: UXColor.orange,
-            ]),
-            .codeInline(with: [
-                .font: theme.fonts.body.with(traits: .monoSpace),
-                .foregroundColor: UXColor.orange,
-            ]),
-            .emphasis(with: [
-                .font: theme.fonts.body.with(traits: .universalItalic),
-                .foregroundColor: UXColor.yellow,
-            ]),
-            .h1(with: [
-                .font: theme.fonts.heading1,
-                .foregroundColor: UXColor.green,
-            ]),
-            .h2(with: [
-                .font: theme.fonts.heading2,
-                .foregroundColor: UXColor.green,
-            ]),
-            .h3(with: [
-                .font: theme.fonts.heading3,
-                .foregroundColor: UXColor.green,
-            ]),
-            .h4(with: [
-                .font: theme.fonts.heading4,
-                .foregroundColor: UXColor.green,
-            ]),
-            .h5(with: [
-                .font: theme.fonts.heading5,
-                .foregroundColor: UXColor.green,
-            ]),
-            .h6(with: [
-                .font: theme.fonts.heading6,
-                .foregroundColor: UXColor.green,
-            ]),
-            .strikethrough(with: [
-                .strikethroughStyle: NSUnderlineStyle.single.rawValue,
-                .foregroundColor: UXColor.red,
-            ]),
-            .strong(with: [
-                .font: theme.fonts.body.with(traits: .universalBold),
-//                .foregroundColor : UXColor.blue,
-            ]),
-        ]
-    }
-}
+/// Stifles warnings for null values being coerced to Any.
+/// This can be turned into a standard `TextAttributes` array by calling `.compactMapValues { $0 }`.
+typealias NullableTextAttributes = [NSAttributedString.Key: Any?]
+
+// MARK: - Extensions
 
 extension UXFont {
     func adjusted(for textStyle: TextStyle) -> UXFont {

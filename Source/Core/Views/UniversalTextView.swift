@@ -35,17 +35,24 @@ open class UniversalTextView: UXTextView {
     }
 
     public convenience init(frame: CGRect, displayMode: DisplayMode = .default, theme: Theme = .default) {
-        let textContainer = NSTextContainer()
-        textContainer.widthTracksTextView = true
-        textContainer.heightTracksTextView = true
-
+        // If using a custom NSTextContainer, this view becomes unscrollable.
+        // Therefore we initialize this view first, then pass its textContainer into the layoutManager.
+        self.init(frame: frame)
+        
+        // Example for initializing a custom NSTextContainer:
+        //
+        // let textContainer = NSTextContainer()
+        // textContainer.widthTracksTextView = true
+        // textContainer.heightTracksTextView = true
+        
         let layoutManager = MarkdownLayoutManager(displayMode: displayMode, theme: theme)
-        layoutManager.addTextContainer(textContainer)
+        
+        if let textContainer = self.textContainer {
+            layoutManager.addTextContainer(textContainer)
+        }
 
         let textStorage = MarkdownTextStorage(displayMode: displayMode, theme: theme)
         textStorage.addLayoutManager(layoutManager)
-
-        self.init(frame: frame, textContainer: textContainer)
 
         self.displayMode = displayMode
         self.theme = theme

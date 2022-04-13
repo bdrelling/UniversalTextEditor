@@ -9,7 +9,8 @@ public extension UniversalTextView {
         public let paragraphStyle: NSParagraphStyle
 
         let defaultTextAttributes: TextAttributes
-        private(set) var markdownFormatters: [TextFormatter] = []
+        
+        private(set) lazy var formatters: [TextFormatter] = .markdownFormatters(for: self)
 
         public init(
             colors: ColorCollection = .default,
@@ -24,8 +25,6 @@ public extension UniversalTextView {
                 .font: fonts.body,
                 .paragraphStyle: paragraphStyle ?? .default,
             ]
-
-            self.markdownFormatters = Self.markdownFormatters(for: self)
         }
     }
 }
@@ -52,16 +51,16 @@ public extension UniversalTextView.Theme {
         public let blockQuoteStripe: UXColor
         public let code: UXColor
         public let codeBlockBackground: UXColor
-        public let emphasis: UXColor
-        public let heading1: UXColor
-        public let heading2: UXColor
-        public let heading3: UXColor
-        public let heading4: UXColor
-        public let heading5: UXColor
-        public let heading6: UXColor
+        public let emphasis: UXColor?
+        public let heading1: UXColor?
+        public let heading2: UXColor?
+        public let heading3: UXColor?
+        public let heading4: UXColor?
+        public let heading5: UXColor?
+        public let heading6: UXColor?
         public let link: UXColor
-        public let strikethrough: UXColor
-        public let strong: UXColor
+        public let strikethrough: UXColor?
+        public let strong: UXColor?
 
         public init(
             background: UXColor = .white,
@@ -70,16 +69,16 @@ public extension UniversalTextView.Theme {
             blockQuoteStripe: UXColor = .darkGray,
             code: UXColor = .black,
             codeBlockBackground: UXColor = .lightGray,
-            emphasis: UXColor = .black,
-            heading1: UXColor = .black,
-            heading2: UXColor = .black,
-            heading3: UXColor = .black,
-            heading4: UXColor = .black,
-            heading5: UXColor = .black,
-            heading6: UXColor = .black,
+            emphasis: UXColor? = nil,
+            heading1: UXColor? = nil,
+            heading2: UXColor? = nil,
+            heading3: UXColor? = nil,
+            heading4: UXColor? = nil,
+            heading5: UXColor? = nil,
+            heading6: UXColor? = nil,
             link: UXColor = .blue,
-            strikethrough: UXColor = .darkGray,
-            strong: UXColor = .black
+            strikethrough: UXColor? = nil,
+            strong: UXColor? = nil
         ) {
             self.background = background
             self.body = body
@@ -153,8 +152,8 @@ public extension UniversalTextView.Theme.FontCollection {
 
 // MARK: - Extensions
 
-extension UniversalTextView.Theme {
-    static func markdownFormatters(for theme: UniversalTextView.Theme) -> [TextFormatter] {
+extension Array where Element == TextFormatter {
+    static func markdownFormatters(for theme: UniversalTextView.Theme) -> Self {
         [
             .blockQuote(with: [
                 .foregroundColor: theme.colors.blockQuote,

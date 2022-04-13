@@ -5,6 +5,8 @@ public extension UniversalTextView {
         case plainText
         case stylizedMarkdown
         case stylizedHiddenMarkdown
+        
+        // TODO: Add a mode that will allow it to display as rendered. plainText currently resets attributes--we need one that ignores that.
 
         public static let `default`: Self = .stylizedMarkdown
     }
