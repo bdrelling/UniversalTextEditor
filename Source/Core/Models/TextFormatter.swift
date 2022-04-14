@@ -73,6 +73,14 @@ typealias NullableTextAttributes = [NSAttributedString.Key: Any?]
 
 // MARK: - Extensions
 
+extension TextFormatter: Equatable {
+    static func == (lhs: TextFormatter, rhs: TextFormatter) -> Bool {
+        // The TextAttributes array can't be Equatable because of the Any type.
+        // Therefore, we'll just compare based on the pattern.
+        lhs.pattern == rhs.pattern
+    }
+}
+
 extension UXFont {
     func adjusted(for textStyle: TextStyle) -> UXFont {
         let preferredFont = UXFont.preferredFont(forTextStyle: textStyle)

@@ -24,7 +24,7 @@ public class MarkdownTextStorage: NSTextStorage {
     }
 
     private var formatters: [TextFormatter] {
-        .markdownFormatters(for: self.theme)
+        self.theme.formatters
     }
 
     // MARK: Initializers

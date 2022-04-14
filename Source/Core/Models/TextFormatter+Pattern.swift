@@ -88,6 +88,8 @@ extension TextFormatter.Pattern {
 
 // MARK: - Extensions
 
+extension TextFormatter.Pattern: Equatable {}
+
 extension TextFormatter.Pattern {
     init(_ element: MarkdownElement, excluding: String? = nil) {
         self.init(element.pattern, excluding: excluding)

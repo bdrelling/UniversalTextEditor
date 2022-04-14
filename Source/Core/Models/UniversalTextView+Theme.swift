@@ -7,10 +7,9 @@ public extension UniversalTextView {
         public let colors: ColorCollection
         public let fonts: FontCollection
         public let paragraphStyle: NSParagraphStyle
-
-        let defaultTextAttributes: TextAttributes
         
-        private(set) lazy var formatters: [TextFormatter] = .markdownFormatters(for: self)
+        private(set) var formatters: [TextFormatter] = []
+        private(set) var defaultTextAttributes: TextAttributes
 
         public init(
             colors: ColorCollection = .default,
@@ -20,11 +19,12 @@ public extension UniversalTextView {
             self.colors = colors
             self.fonts = fonts
             self.paragraphStyle = paragraphStyle ?? .default
-
             self.defaultTextAttributes = [
                 .font: fonts.body,
                 .paragraphStyle: paragraphStyle ?? .default,
             ]
+            
+            self.formatters = .markdownFormatters(for: self)
         }
     }
 }
@@ -102,6 +102,15 @@ public extension UniversalTextView.Theme {
 
 // MARK: - Convenience
 
+extension UniversalTextView.Theme: Equatable {
+    public static func == (lhs: UniversalTextView.Theme, rhs: UniversalTextView.Theme) -> Bool {
+        lhs.colors == rhs.colors
+        && lhs.fonts == rhs.fonts
+        && lhs.paragraphStyle == rhs.paragraphStyle
+        && lhs.formatters == rhs.formatters
+    }
+}
+
 public extension UniversalTextView.Theme {
     static let `default`: Self = .init(
         colors: .default,
@@ -113,6 +122,8 @@ public extension UniversalTextView.Theme {
         fonts: .default
     )
 }
+
+extension UniversalTextView.Theme.ColorCollection: Equatable {}
 
 public extension UniversalTextView.Theme.ColorCollection {
     static let `default`: Self = .init()
@@ -136,6 +147,8 @@ public extension UniversalTextView.Theme.ColorCollection {
         strong: .blue
     )
 }
+
+extension UniversalTextView.Theme.FontCollection: Equatable {}
 
 public extension UniversalTextView.Theme.FontCollection {
     static let `default`: Self = .init(

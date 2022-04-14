@@ -3,22 +3,27 @@
 import Down
 import SwiftUI
 
-#if DEBUG
-    import Combine
-#endif
-
 open class UniversalTextView2: UXTextView {
     public typealias DisplayMode = UniversalTextView.DisplayMode
-
-    @available(*, unavailable)  override open var layoutManager: NSLayoutManager? {
-        nil
-    }
+    public typealias Theme = UniversalTextView.Theme
+    
+    // MARK: Properties
 
     public private(set) var hasMenuEnabled: Bool = true
 
-    #if DEBUG
-        private var subscriptions = Set<AnyCancellable>()
-    #endif
+    public var displayMode: DisplayMode = .default {
+        didSet {
+            (self.layoutManager as? MarkdownLayoutManager)?.displayMode = self.displayMode
+            (self.textStorage as? MarkdownTextStorage)?.displayMode = self.displayMode
+        }
+    }
+
+    public var theme: Theme = .default {
+        didSet {
+            (self.layoutManager as? MarkdownLayoutManager)?.theme = self.theme
+            (self.textStorage as? MarkdownTextStorage)?.theme = self.theme
+        }
+    }
 
     private let keyboardShortcuts: [KeyboardShortcut] = [
         .init(characters: "b", modifierFlags: [.command], action: #selector(toggleSelectionBold)),
@@ -26,31 +31,29 @@ open class UniversalTextView2: UXTextView {
         .init(characters: "u", modifierFlags: [.command], action: #selector(toggleSelectionUnderline)),
     ]
 
-    public convenience init(frame: CGRect, displayMode: DisplayMode) {
-        switch displayMode {
-        case .plainText:
-            self.init(frame: frame)
-        case .stylizedMarkdown, .stylizedHiddenMarkdown:
-            let textContainer = NSTextContainer()
-            textContainer.widthTracksTextView = true
-            textContainer.heightTracksTextView = true
+    // MARK: Initializers
 
-            let textLayoutManager = MarkdownTextLayoutManager()
-            textLayoutManager.textContainer = textContainer
+    public convenience init(displayMode: DisplayMode = .default, theme: Theme = .default) {
+        self.init(frame: .zero, displayMode: displayMode, theme: theme)
+    }
 
-            let textContentStorage = MarkdownTextContentStorage()
-            textContentStorage.addTextLayoutManager(textLayoutManager)
+    public convenience init(frame: CGRect, displayMode: DisplayMode = .default, theme: Theme = .default) {
+        // If using a custom NSTextContainer, this view becomes unscrollable.
+        // Therefore we initialize this view first, then pass its textContainer into the layoutManager.
+        self.init(frame: frame)
+        
+        let textContainer = NSTextContainer()
+        textContainer.widthTracksTextView = true
+        textContainer.heightTracksTextView = true
+        
+        let layoutManager = MarkdownTextLayoutManager()
+        layoutManager.textContainer = textContainer
 
-            self.init(frame: frame, textContainer: textContainer)
-        }
+        let textStorage = MarkdownTextContentStorage()
+        textStorage.addTextLayoutManager(layoutManager)
 
-        #if DEBUG
-            NotificationCenter.default.publisher(for: NSTextView.didSwitchToNSLayoutManagerNotification)
-                .sink { _ in
-                    print("Did switch to TextKit 1!")
-                }
-                .store(in: &self.subscriptions)
-        #endif
+        self.displayMode = displayMode
+        self.theme = theme
     }
 
     #if os(macOS)
@@ -72,6 +75,8 @@ open class UniversalTextView2: UXTextView {
         super.init(coder: coder)
     }
 }
+
+// MARK: - Extensions
 
 #if canImport(UIKit)
 

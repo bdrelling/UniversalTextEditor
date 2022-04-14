@@ -50,7 +50,9 @@ public struct UniversalTextViewRepresentable {
             textView.displayMode = self.displayMode
         }
         
-        textView.theme = self.theme
+        if textView.theme != self.theme {
+            textView.theme = self.theme
+        }
     }
 
     public func makeCoordinator() -> Coordinator {
