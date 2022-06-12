@@ -12,30 +12,47 @@ struct RootView: View {
         case down
     }
     
+    let markdown: String = "**Wow!!**"
+    
     @State private(set) var text = NSAttributedString(string: Self.sampleText)
     @State private(set) var displayMode: DisplayMode = .stylizedMarkdown
     @State private(set) var theme: UniversalTextView.Theme = .debug
 
     var body: some View {
         VStack {
-            Picker("Mode", selection: self.$displayMode) {
-                Text("Plain Text")
-                    .tag(DisplayMode.plainText)
-                Text("Stylized Markdown")
-                    .tag(DisplayMode.stylizedMarkdown)
-                Text("Stylized Hidden Markdown")
-                    .tag(DisplayMode.stylizedHiddenMarkdown)
+            Group {
+                Text(markdown: "This is some **bold** and _italic_ text.")
             }
-            .pickerStyle(SegmentedPickerStyle())
-            .padding()
-            .background(.secondary)
-            .frame(maxWidth: .infinity)
-
-            UniversalTextEditor(
-                text: self.$text,
-                displayMode: self.$displayMode,
-                theme: self.$theme
-            )
+            
+            Group {
+                Text("**This is crazyyyy!!**")
+                + Text(" Wow!")
+                + Text(" · ")
+                    .foregroundColor(.red)
+                + Text(medlyMarkdown: "This is some **bold** and _italic_ text.")
+                + Text(" And more text for good measure.")
+            }
+            
+            Spacer()
+            
+//            Picker("Mode", selection: self.$displayMode) {
+//                Text("Plain Text")
+//                    .tag(DisplayMode.plainText)
+//                Text("Stylized Markdown")
+//                    .tag(DisplayMode.stylizedMarkdown)
+//                Text("Stylized Hidden Markdown")
+//                    .tag(DisplayMode.stylizedHiddenMarkdown)
+//            }
+//            .pickerStyle(SegmentedPickerStyle())
+//            .padding()
+//            .background(.secondary)
+//            .frame(maxWidth: .infinity)
+//
+//            UniversalTextEditor(
+//                text: self.$text,
+//                displayMode: self.$displayMode,
+//                theme: self.$theme
+//            )
         }
     }
 }

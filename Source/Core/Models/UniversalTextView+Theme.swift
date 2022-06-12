@@ -224,8 +224,8 @@ private extension NSParagraphStyle {
     static var `default`: NSParagraphStyle {
         let style = NSMutableParagraphStyle()
 //        style.lineSpacing = 20
-        style.firstLineHeadIndent = 0
-        style.paragraphSpacing = 12
+        style.firstLineHeadIndent = 60
+        style.paragraphSpacing = 0
         style.lineBreakMode = .byWordWrapping
 
         return style
